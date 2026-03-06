@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>SIte bao</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="titulo">
+            <h1>Gerenciador de produtos</h1>
+
+            <p>Cadastre, edite, busque e remove produtos</p>
+        </div>
+        <main class="conteudo">
+            <form class="form">
+                <h1>Cadastro de Produto</h1>
+                <div class="grupo">
+                    <label for="nome">Nome</label>
+                    <input type="text" placeholder="Digite o nome do produto" id="nome" name="nome">
+                </div>
+                <div class="grupo">
+                    <label for="preco">Preço</label>
+                    <input type="number" placeholder="Digite o preço do produto" id="preco" name="preco">
+                </div>
+                <div class="grupo">
+                    <label for="descricao">Descrição</label>
+                    <textarea name="descricao" id="descricao"></textarea>
+                </div>
+                <button id="btn-cadastrar" type="submit" >Cadastrar</button>
+            </form>
+          
+
+            <section>
+                <div class="pesquisa">
+                    <input type="text" id="input-buscar" placeholder="Buscar por nome">
+                    <button type="button" id="btn-buscar">Buscar</button>
+                </div>
+                <ul class="lista-produtos">
+                    <li class="produto">
+                        <h3>Ifhone noob min -14</h3>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quae blanditiis rerum, sint
+                            perspiciatis nulla pariatur, voluptates ducimus atque, facere ipsa aperiam alias omnis
+                            corrupti assumenda voluptatem quo. Laudantium, libero error.</p>
+                        <p>-4500 R$</p>
+                        <div class="acoes">
+                            <button>Editar</button>
+                            <button>Apagar</button>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+        </main>
+    </div>
+    <script src="./script.js"></script>
+</body>
+
+
+</html>
