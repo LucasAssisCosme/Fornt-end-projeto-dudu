@@ -5,18 +5,29 @@ const nomeProduto = document.querySelector('#nome')
 const precoProduto = document.querySelector('#preco')
 const decricaoProduto = document.querySelector('#descricao')
 const listaProduto = document.querySelector('.lista-produtos')
+const btnCadastra = document.querySelector('#btn-cadastrar')
+let idEmedicao = null
 
 async function salvarProduto(e) {
 
     e.preventDefault()
 
    try {
-    //Fetch
-    //Ela serve para:
-    // buscar dados
-   // enviar dados
-   // comunicar com um backend (API)
-     await fetch(API + '/cadastro', {
+
+    if (idEmedicao) {
+        const resposta = await fetch(API+'/atualizar/'+ idEmedicao, {
+            method: 'PATCH',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+               nome: nomeProduto.value,
+               preco: precoProduto.value,
+               descricao: decricaoProduto.value,
+            })
+        })
+         idEmedicao = null
+    }
+    else{
+    await fetch(API + '/cadastro', {
         //metodo 
         method: 'POST',
        //tipo de contexto que ele precisa é json
@@ -28,7 +39,12 @@ async function salvarProduto(e) {
             descricao: decricaoProduto.value,
         }),
     })
+    }
+
+
+    
     alert("produto cadastrado com sucesso!!!")
+    buscarProdutos()
     limparCampo()
    }
     catch (error) {
@@ -36,6 +52,7 @@ async function salvarProduto(e) {
     
    }
 }
+
 function criarItensProduto(produto){
     const li = document.createElement('li')
     const nomeP = document.createElement('h3')    
@@ -47,6 +64,14 @@ function criarItensProduto(produto){
     
     //Adcionar evento ao botão, fazendo excluir baseado no id
     botaoExcluir.addEventListener('click', () => excluirProduto(produto.id))
+    botaoEditar.addEventListener('click', () =>  {
+        nomeProduto.value = produto.nome
+        precoProduto.value = produto.preco
+        decricaoProduto.value = produto.descricao
+
+        idEmedicao = produto.id
+        btnCadastra.textContent = 'Editar'
+    })
 
     //Adcionando o texto
     // pegar do banco
@@ -68,6 +93,21 @@ function criarItensProduto(produto){
     
 }
 
+async function excluirProduto(id){
+try {
+    let confirmarExclusao = confirm("Deseja realmente excluir?")
+    if (confirmarExclusao) {
+        await fetch(API + '/delete/' +id, {
+            method: 'DELETE'
+        })
+        buscarProdutos()
+    } 
+} catch (error) {
+    console.log("Erro ao excluir produto: " + error);
+    
+}
+}
+
 async function buscarProdutos() {
     
     try{
@@ -75,14 +115,23 @@ async function buscarProdutos() {
 
         const json = await dados.json() //Tranforma em json
 
-        console.log(json)
         
-    } catch(erro){
 
+        mostrarProdutos(json)
+
+    } catch(erro){
+        console.log("Erro ao buscar produtos no banco de dados: " + erro);
+        
     }  
 }
 
-buscarProdutos()
+function mostrarProdutos(produtos){
+   listaProduto.innerHTML = ''
+   produtos.forEach((produto) => {
+    criarItensProduto(produto)
+   });
+}
+
 
 function limparCampo () {
     nomeProduto.value = ''
@@ -96,3 +145,4 @@ function limparCampo () {
 
 //ao clicar no botão de enviar de enviar ele vai salvar o produto 
 formulario.addEventListener('submit', salvarProduto)
+buscarProdutos()
